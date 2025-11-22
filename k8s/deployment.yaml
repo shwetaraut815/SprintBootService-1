@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
        - name: v1
-         image: shwetaraut815/myapp:1.0
+         image: shwetaraut815/jar:1.0
          ports:
            - containerPort: 8090
