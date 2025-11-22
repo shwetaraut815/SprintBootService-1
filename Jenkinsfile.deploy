@@ -10,21 +10,13 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KCFG')]) {
-                    sh '''
-                        echo "Using kubeconfig: $KCFG"
-                        export KUBECONFIG=$KCFG
+                sh '''
+                    echo "Using local kubeconfig..."
+                    export KUBECONFIG=/etc/kubernetes/admin.conf
 
-                        echo "Checking Kubernetes cluster..."
-                        kubectl get nodes
-
-                        echo "Applying Deployment..."
-                        kubectl apply -f k8s/deployment.yaml
-
-                        echo "Applying Service..."
-                        kubectl apply -f k8s/service.yaml
-                    '''
-                }
+                    kubectl get nodes
+                    kubectl apply -f deployment.yaml
+                '''
             }
         }
     }
