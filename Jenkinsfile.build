@@ -38,7 +38,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f jar || true
-                    docker run -dp 8080:8090 --name jar shwetaraut815/jar:1.0
+                    docker run -dp 8090:8080 --name jar shwetaraut815/jar:1.0
                     sleep 10
 
                     # Test using localhost, not public IP
