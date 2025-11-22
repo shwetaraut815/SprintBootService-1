@@ -1,0 +1,21 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+   name: velpod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: velpod
+
+  template:
+    metadata:
+     labels:
+       name: velpod
+
+    spec:
+      containers:
+       - name: v1
+         image: shwetaraut815/myapp:1.0
+         ports:
+           - containerPort: 8090
