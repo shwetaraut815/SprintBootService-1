@@ -1,23 +1,29 @@
 pipeline {
     agent any
 
+    environment {
+        KUBECONFIG = "/etc/kubernetes/admin.conf"
+    }
+
     stages {
+
         stage("Checkout") {
             steps {
                 git branch: 'master', url: 'https://github.com/shwetaraut815/SprintBootService-1.git'
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage("Deploy to Kubernetes") {
             steps {
                 sh '''
-                    echo "Using local kubeconfig..."
-                    export KUBECONFIG=/etc/kubernetes/admin.conf
-
+                    echo "Using kubeconfig: $KUBECONFIG"
                     kubectl get nodes
-                    kubectl apply -f deployment.yaml
+
+                    kubectl apply -f k8s/deployment.yaml
+                    kubectl apply -f k8s/service.yaml
                 '''
             }
         }
+
     }
 }
