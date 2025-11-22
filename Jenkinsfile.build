@@ -1,0 +1,58 @@
+pipeline {
+    agent { label "built-in" }
+
+    stages {
+
+        stage("Git Checkout") {
+            steps {
+                git branch: 'master', url: 'https://github.com/shwetaraut815/SprintBootService-1.git'
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    '''
+                }
+            }
+        }
+
+        stage("Compilation") {
+            steps {
+                sh "mvn clean package -DskipTests"
+            }
+        }
+
+        stage("Build Docker Image") {
+            steps {
+                sh "docker build -t shwetaraut815/jar:1.0 ."
+            }
+        }
+
+        stage("Test") {
+            steps {
+                sh '''
+                    docker rm -f jar || true
+                    docker run -dp 8080:8090 --name jar shwetaraut815/jar:1.0
+                    sleep 10
+
+                    # Test using localhost, not public IP
+                    curl -f http://localhost:8080 || exit 1
+
+                    echo "Tests passed successfully"
+
+                    docker stop jar || true
+                    docker rm jar || true
+                '''
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                sh 'docker push shwetaraut815/jar:1.0'
+            }
+        }
+    }
+}
