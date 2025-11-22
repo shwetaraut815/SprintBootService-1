@@ -1,5 +1,8 @@
 pipeline {
     agent { label "built-in" }
+    tools {
+    maven 'maven'
+}
 
     stages {
 
