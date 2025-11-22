@@ -1,10 +1,7 @@
 pipeline {
-    agent {
-        label "built-in"
-    }
+    agent any
 
     stages {
-
         stage("Git Checkout") {
             steps {
                 git branch: 'master', url: 'https://github.com/shwetaraut815/SprintBootService-1.git'
@@ -13,15 +10,16 @@ pipeline {
 
         stage("Deploy to Kubernetes") {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    sh """
-                        export KUBECONFIG=$KUBECONFIG
-                        kubectl apply -f k8s/deployment.yaml
-                        kubectl apply -f k8s/service.yaml
-                    """
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KCFG')]) {
+                    sh '''
+                        export KUBECONFIG="$KCFG"
+                        kubectl version --short
+                        kubectl get nodes
+                        kubectl apply -f k8s/deployment.yaml --validate=false
+                        kubectl apply -f k8s/service.yaml --validate=false
+                    '''
                 }
             }
         }
-
     }
 }
