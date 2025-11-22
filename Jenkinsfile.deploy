@@ -10,12 +10,12 @@ pipeline {
         }
     stage ("deployment") {
         steps {
-            sh "kubectl apply -f deployment.yaml"
+            sh "kubectl apply -f k8s/deployment.yaml"
         }
     }
     stage ("service") {
         steps {
-            sh "kubectl apply -f service.yaml"
+            sh "kubectl apply -f k8s/service.yaml"
         }
     }
 
