@@ -42,7 +42,7 @@ pipeline {
                     sleep 10
 
                     # Test using localhost, not public IP
-                    curl -f http://54.163.45.115:8080 || exit 1
+                    curl -f http://54.163.45.115:8090 || exit 1
 
                     echo "Tests passed successfully"
 
