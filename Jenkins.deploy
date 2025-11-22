@@ -1,0 +1,23 @@
+pipeline {
+    agent {
+        label "built-in"
+    }
+    stages {
+     stage("Git Checkout") {
+            steps {
+                git branch: 'master', url: 'https://github.com/shwetaraut815/SprintBootService-1.git'
+            }
+        }
+    stage ("deployment") {
+        steps {
+            sh "kubectl apply -f deployment.yaml"
+        }
+    }
+    stage ("service") {
+        steps {
+            sh "kubectl apply -f service.yaml"
+        }
+    }
+
+ }
+}
