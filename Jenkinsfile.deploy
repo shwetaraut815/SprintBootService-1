@@ -8,20 +8,17 @@ pipeline {
             }
         }
 
-        stage("Deploy to Kubernetes") {
-            steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KCFG')]) {
-                    sh '''
-                        export KUBECONFIG="$KCFG"
+      stage('Deploy to Kubernetes') {
+    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KCFG')]) {
+        sh '''
+            echo "Using kubeconfig file at: $KCFG"
+            export KUBECONFIG=$KCFG
+            
+            kubectl get nodes
+            kubectl apply -f deployment.yaml
+        '''
+    }
+}
 
-                        echo "Using kubeconfig: $KUBECONFIG"
-
-                        kubectl get nodes
-                        kubectl apply -f k8s/deployment.yaml --validate=false
-                        kubectl apply -f k8s/service.yaml --validate=false
-                    '''
-                }
-            }
-        }
     }
 }
