@@ -4,7 +4,8 @@
 This project demonstrates an end-to-end CI/CD pipeline for a telecom microservice. Infrastructure is provisioned by Terraform, configured with Ansible, CI is Jenkins (Maven, Docker), images are pushed to ECR/Docker Hub, and deployments run on Kubernetes (kubeadm) with manifests in `k8s/`.
 
 ## Repo structure
-- Jenkinsfile
+- Jenkinsfile.build
+- Jenkinsfile.deploy
 - Dockerfile
 - src/
 - pom.xml
